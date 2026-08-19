@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>声音映射练习</title>
+  <style>
+    :root{--blue:#3478f6;--blue-dark:#285fce;--blue-soft:#edf3ff;--ink:#202631;--muted:#707a87;--line:#e0e5e9;--surface:#f7f9fa;--green:#158465;--green-soft:#e6f7f1;--red:#c84049;--red-soft:#ffeded;--purple:#7655a8;--purple-soft:#eee6f7}
+    *{box-sizing:border-box}body{margin:0;background:#eef1f5;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}button{font:inherit}.app{min-height:100svh;display:grid;place-items:center;padding:28px 16px}.device{width:min(100%,438px);padding:9px;border-radius:49px;background:linear-gradient(150deg,#353b39,#080a09 42%,#252b29);box-shadow:0 28px 72px rgba(24,30,29,.24)}.phone{height:min(824px,calc(100svh - 56px));min-height:650px;display:flex;flex-direction:column;overflow:hidden;border-radius:40px;background:#fff}.top{height:78px;flex:0 0 78px;padding:24px 20px 14px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line)}.back{width:36px;height:36px;display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--muted);cursor:pointer}.back svg,.audio-button svg,.tip-audio svg,.mic svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.back svg{width:18px;height:18px}.progress{flex:1;height:9px;overflow:hidden;border-radius:999px;background:#e8ebef}.progress span{display:block;height:100%;background:var(--blue);transition:width .3s}.counter{color:#5f6875;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}.content{flex:1;overflow:auto;display:flex;flex-direction:column;padding:25px 22px 24px;scrollbar-width:none}.content::-webkit-scrollbar{display:none}.page{display:none;min-height:100%;flex-direction:column}.page.active{display:flex;animation:enter .25s ease}@keyframes enter{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}h1{margin:0 0 18px;font-size:21px}.word-card{padding:18px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.word-layout{display:grid;grid-template-columns:46px minmax(0,1fr);align-items:center;gap:17px;min-height:100px}.audio-actions{display:grid;gap:9px}.audio-button{width:42px;height:42px;display:grid;place-items:center;padding:0;border:1px solid #dfe3e8;border-radius:12px;background:#fff;color:#59636f;font-size:15px;font-weight:700;cursor:pointer}.audio-button:hover{border-color:#cbd8ee;background:#f6f9ff;color:var(--blue)}.audio-button svg{width:22px;height:22px}.ipa{margin-bottom:5px;color:var(--muted);font-size:15px}.word{margin:0 0 5px;font:500 30px/1.2 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}.meaning{color:var(--muted);font-size:14px}.target{padding:0 2px;border-radius:5px;background:#dce8ff;color:#245fc8}.knowledge-wrap{display:none;margin-top:18px}.knowledge-wrap.show{display:block;animation:enter .3s ease}.concept-card{padding:16px;border:1px solid #d8e4f7;border-radius:14px;background:#f5f8ff}.concept-title{display:flex;align-items:baseline;gap:9px;margin-bottom:8px}.concept-title strong{font:650 26px/1 Georgia,serif}.concept-title span{color:var(--blue);font:700 20px/1 "Charis SIL","Noto Sans",sans-serif}.concept-card p{margin:0;color:#586576;font-size:14px;line-height:1.55}.mouth-placeholder{height:112px;margin-top:14px;display:grid;place-items:center;border:1px dashed #b9c8dd;border-radius:12px;background:#fff;color:#77869a;text-align:center}.mouth-placeholder svg{width:32px;height:32px;margin:0 auto 7px;display:block;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.bottom-action{margin-top:auto;padding-top:22px}.primary{width:100%;min-height:50px;border:0;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}.primary:disabled{background:#d8dde5;color:#8b94a0;cursor:not-allowed}.primary:not(:disabled):hover{background:var(--blue-dark)}.assemble{margin-top:20px}.assemble h2{margin:0 0 6px;font-size:17px}.assemble-hint{margin:0 0 14px;color:var(--muted);font-size:13px}.slots{display:grid;grid-template-columns:repeat(var(--slot-count),1fr);gap:8px;margin-bottom:18px}.slot{height:58px;display:grid;place-items:center;border:1.5px dashed #bac5d1;border-radius:11px;background:#fafbfc;color:#8b95a0;cursor:default}.slot.filled{border-style:solid;border-color:#ccd5df;background:#fff}.slot.correct{border-color:#75cdb1;background:var(--green-soft);color:var(--green)}.slot.wrong{border-color:#e2a4a8;background:var(--red-soft);color:var(--red);cursor:pointer}.slot.revealed{font:650 20px/1 Georgia,serif}.slot.target-reveal{border-color:#9dbcf7;background:var(--blue-soft);color:#245fc8}.choices{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;min-height:60px}.sound-choice{width:88px;height:58px;display:flex;align-items:center;justify-content:center;gap:3px;border:1px solid #d9dfe6;border-radius:12px;background:#fff;color:var(--blue);cursor:pointer}.sound-choice:hover{border-color:#a9c0ec;background:#f7f9ff}.sound-choice.used{visibility:hidden}.sound-choice i,.slot i{display:block;width:3px;border-radius:4px;background:currentColor}.sound-choice i:nth-child(1),.slot i:nth-child(1){height:12px}.sound-choice i:nth-child(2),.slot i:nth-child(2){height:24px}.sound-choice i:nth-child(3),.slot i:nth-child(3){height:16px}.sound-choice i:nth-child(4),.slot i:nth-child(4){height:30px}.sound-choice i:nth-child(5),.slot i:nth-child(5){height:18px}.sound-choice i:nth-child(6),.slot i:nth-child(6){height:10px}.result-note{min-height:22px;margin:13px 0 0;color:var(--red);font-size:13px;text-align:center}.assembly-action{margin-top:14px}.speaking{display:none;flex:1;min-height:285px;padding-top:22px;flex-direction:column}.speaking.show{display:flex;animation:enter .3s ease}.speaking-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.speaking-head h2{margin:0;font-size:17px}.speaking-head span{color:var(--muted);font-size:13px}.speech-feedback{display:none}.speech-feedback.show{display:block}.knowledge{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}.knowledge h3{margin:0;padding-bottom:10px;border-bottom:1px solid #dfe4e7;font-size:17px}.knowledge-point{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 1px}.knowledge-point+.knowledge-point{border-top:1px solid var(--line)}.knowledge-copy b{display:flex;align-items:baseline;gap:8px;font-size:15px;line-height:1.35}.knowledge-copy p{margin:4px 0 0;color:#596461;font-size:14px;line-height:1.5}.grapheme{min-width:28px;padding:1px 5px;border-radius:5px;color:var(--ink);font:500 18px/1.25 Georgia,serif;text-align:center}.knowledge-point:nth-of-type(1) .grapheme{background:#ccecf5}.knowledge-point:nth-of-type(2) .grapheme{background:var(--purple-soft)}.knowledge-point:nth-of-type(1) b{color:#176d91}.knowledge-point:nth-of-type(2) b{color:var(--purple)}.tip-audio{width:38px;height:38px;display:grid;place-items:center;border:1px solid #cbd5dc;border-radius:50%;background:#fff;color:#52616e;cursor:pointer}.tip-audio svg{width:18px;height:18px}.word-result{display:inline-block;border-radius:6px;padding:1px 3px;font-weight:700}.word-result.correct{background:var(--green-soft);color:var(--green)}.word-result.wrong{background:var(--red-soft);color:var(--red)}.dock{margin-top:auto;padding-top:18px;text-align:center}.wave{display:none;height:40px;align-items:center;justify-content:center;gap:4px;margin-bottom:10px}.wave.show{display:flex}.wave i{width:4px;border-radius:4px;background:var(--blue);animation:wave .7s ease-in-out infinite alternate}.wave i:nth-child(1),.wave i:nth-child(5){height:13px}.wave i:nth-child(2),.wave i:nth-child(4){height:27px;animation-delay:.16s}.wave i:nth-child(3){height:38px;animation-delay:.3s}@keyframes wave{to{transform:scaleY(.45)}}.mic{width:66px;height:66px;display:grid;place-items:center;margin:0 auto 12px;border:0;border-radius:50%;background:var(--blue);color:#fff;box-shadow:0 10px 25px rgba(23,36,33,.18);cursor:pointer}.mic svg{width:27px;height:27px}.mic.recording{animation:pulse 1s infinite}.mic.recording svg{display:none}.mic.recording:before{content:"■";font-size:18px}@keyframes pulse{50%{transform:scale(1.06)}}.loader{display:none;width:32px;height:32px;margin:18px auto;border:4px solid #dce5ff;border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}.loader.show{display:block}@keyframes spin{to{transform:rotate(360deg)}}.speech-actions{display:grid;gap:8px}.text-action{display:none;justify-self:center;padding:5px 12px;border:0;background:transparent;color:#8c969f;font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.speech-actions .primary{display:none}.text-action.show,.speech-actions .primary.show{display:block}.success-note{display:none;margin-bottom:12px;color:var(--green);font-size:14px;font-weight:700;text-align:center}.success-note.show{display:block}.complete-page{text-align:center;justify-content:center}.complete-mark{width:82px;height:82px;margin:0 auto 22px;display:grid;place-items:center;border-radius:50%;background:var(--green-soft);color:var(--green);font-size:36px}.complete-page h1{font-size:25px}.complete-page p{margin:0;color:var(--muted);line-height:1.6}.complete-page .primary{margin-top:36px}button:focus-visible{outline:3px solid rgba(52,120,246,.28);outline-offset:2px}@media(max-width:480px){body{background:#fff}.app{padding:0}.device{width:100%;padding:0;border-radius:0;background:transparent;box-shadow:none}.phone{height:100svh;min-height:600px;border-radius:0}.content{padding:22px 18px}.speaking{min-height:250px}}
+    .lesson-card{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#fff}.lesson-card>.word-card{border:0;border-radius:0}.lesson-card .knowledge-wrap{margin:0;border-top:1px solid #dce5f2;background:#f5f8ff}.lesson-card .concept-card{padding:17px 16px 16px;border:0;border-radius:0;background:transparent}.mouth-media{position:relative;overflow:hidden;margin:14px 0 0;border:1px solid #d7e0ec;border-radius:12px;background:#e5e7eb;aspect-ratio:16/9}.mouth-media img{display:block;width:100%;height:100%;object-fit:cover}.media-play{position:absolute;left:50%;top:50%;width:50px;height:50px;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.7);border-radius:50%;background:rgba(25,34,47,.66);color:#fff;transform:translate(-50%,-50%);box-shadow:0 5px 18px rgba(20,28,40,.24);backdrop-filter:blur(5px);cursor:pointer}.media-play:hover{background:rgba(25,34,47,.78)}.media-play:active{transform:translate(-50%,-50%) scale(.94)}.media-play svg{width:22px;height:22px;margin-left:3px;fill:currentColor}.concept-title{align-items:center;gap:8px}.phoneme-play{width:28px;height:28px;display:grid;place-items:center;margin-left:0;padding:0;border:0;border-radius:50%;background:transparent;color:var(--blue);cursor:pointer}.phoneme-play:hover{background:rgba(52,120,246,.08)}.phoneme-play:active{transform:scale(.94)}.phoneme-play svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.target{padding:0;background:transparent;color:#245fc8;font-weight:650}.teaching-segment{border-radius:5px;padding:0 2px;transition:background .15s}.teaching-segment.active{background:#dce8ff}.target-page{justify-content:center;text-align:center}.target-page h1{margin:auto 0;font:700 34px/1.25 "Charis SIL","Noto Sans",sans-serif}.target-page .primary{margin-top:auto}#practiceTitle{display:none;margin:0 0 18px;font-size:21px}.practice-reference{padding:15px 16px;background:#fff}.practice-reference .word-layout{min-height:88px}.practice-reference .audio-button{width:38px;height:38px;border-color:#d7e3fa;border-radius:50%;background:var(--blue-soft);color:var(--blue);box-shadow:none}.practice-reference .audio-button:hover{border-color:#bfd2f6;background:#e5edff}.practice-reference .audio-button:active{transform:scale(.94)}.assembly-card{overflow:hidden;margin-top:16px;border:1px solid #dfe5ec;border-radius:16px;background:#f7f9fc}.assemble{margin:0;padding:18px 16px 16px;border:0;border-radius:0;background:#f7f9fc}.assembly-title{margin:0 0 16px;font-size:18px;line-height:1.35}.assemble.exiting{opacity:0;transform:translateY(-5px);transition:opacity .2s ease,transform .2s ease}.assemble .slots,.assemble .choices{display:grid;grid-template-columns:repeat(var(--slot-count),minmax(0,1fr));gap:10px}.assemble .slots{margin-bottom:24px}.assemble .choices{min-height:58px;padding:0;border:0;border-radius:0;background:transparent}.assemble .choices.empty{display:none}.assemble .sound-choice{width:100%;height:58px;font:600 18px/1 "Charis SIL","Noto Sans",sans-serif;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease}.assemble .sound-choice:hover{transform:translateY(-2px);border-color:#afc3e7}.assemble .sound-choice:active{transform:translateY(-1px);border-color:var(--blue);background:var(--blue-soft)}.assemble .slot.empty-slot{align-items:end;padding:0 15px 12px}.slot-line{width:100%;height:2px;border-radius:999px;background:#aab4c0;transition:background .16s ease}.assemble .slot.filled{cursor:grab;transition:transform .16s ease,border-color .16s ease,background .16s ease}.assemble .slot.filled:active,.assemble .slot.dragging{cursor:grabbing;transform:scale(1.02);border-color:var(--blue);background:var(--blue-soft)}.assemble .slot.drag-target{border-color:#9dbcf7;background:#f2f6ff}.assemble .slot.drop-ready{border-color:var(--blue);background:var(--blue-soft)}.assemble .slot.drop-ready .slot-line{background:var(--blue)}.assemble .result-note{margin-top:10px}.assembly-action{margin-top:auto;padding-top:20px}.assemble.complete .slots{margin-bottom:16px}.assemble.complete .choices{display:none}.assembly-concept{display:none;background:#f5f8ff}.assembly-concept.show{display:block;animation:enter .3s ease}.assembly-concept .concept-card{padding:17px 16px 16px;border:0;border-radius:0;background:transparent}.speaking{padding-top:0}.slot.mapped{font:600 19px/1 Georgia,serif}.slot.silent-reveal{border-color:#d7dce2;background:#f4f5f7;color:#8b929b;text-decoration:line-through;text-decoration-thickness:1.5px}
+    .assembly-card{overflow:visible;margin-top:24px;border:0;border-radius:0;background:transparent}.assemble{padding:0;background:transparent}
+    #practiceTitle{font-size:22px;font-weight:750;line-height:1.35;letter-spacing:-.02em;margin-bottom:16px}
+    .practice-reference{border-color:#dfe5ec;border-radius:16px}.practice-reference .word-layout{min-height:92px}.practice-reference .word{font-size:29px}.practice-reference .ipa,.practice-reference .meaning{color:#687483}
+    .assemble .slots{margin-bottom:28px}.assemble .slot{height:62px;background:#fbfcfe}.assemble .choices{min-height:56px}.assemble .sound-choice{height:56px;background:#fff}
+    .assembly-action{padding-top:24px;padding-bottom:2px}.assembly-action .primary{min-height:52px}
+    .assembly-concept{overflow:hidden;border:1px solid #d8e4f7;border-radius:16px;background:#f5f8ff}.assembly-concept.show{margin-top:28px}.concept-heading{margin:0 0 14px;padding:0 0 10px;border:0;border-bottom:1px solid #dbe4f2;font-size:13px;font-weight:600;line-height:1.3;color:#758399}.assembly-concept .concept-title{margin-bottom:10px}.assembly-concept .concept-title strong{font-size:30px}.assembly-concept .concept-title span{font-size:22px}.assembly-concept .concept-card>p{font-size:14px;line-height:1.55}.speech-feedback.show{margin-top:18px}
+    .assemble .slots{margin-bottom:0}.assemble .choices{width:72%;min-height:50px;margin:72px auto 0;gap:12px}.assemble .sound-choice{height:50px}.assemble .sound-choice i{transform:scaleY(.82)}
+    #practicePage{padding-top:18px}.practice-reference{padding:2px 10px;border:0;background:transparent}.practice-reference .word-layout{width:100%;min-height:84px;margin:0;grid-template-columns:42px minmax(0,1fr);gap:18px}.practice-reference .audio-actions{align-self:center}.practice-reference .audio-button{border-color:#d7e5ff;background:#f3f7ff;color:var(--blue)}.practice-reference .ipa{margin-bottom:8px;line-height:1}.practice-reference .word{margin:0 0 8px;line-height:1}.practice-reference .meaning{margin:0;font-size:14px;line-height:1.2;color:#87909d}.assemble .slots{gap:18px}.assemble .slot{height:54px;border-color:#bdc9d8;background:#fbfcfe}.assemble .slot.empty-slot{padding-bottom:10px}.slot-line{height:1.5px;background:#aeb9c6}.assemble .sound-choice{border-color:#c9daf8;background:#f5f8ff;color:var(--blue)}.assemble .sound-choice:hover{border-color:#8fb2f6;background:#edf4ff}
+    @media(max-width:480px){.assemble .choices{width:76%;margin-top:64px}.assembly-concept.show{margin-top:24px}}
+    .mapping-slots{width:min(100%,300px);display:grid;grid-template-columns:repeat(var(--slot-count),minmax(0,1fr))!important;gap:14px;margin:0 auto}.mapping-row{min-width:0;padding:0 2px}.mapping-answer{width:100%;height:68px;display:flex;align-items:center;justify-content:center;border:0;border-bottom:2px solid #9ca8b7;background:transparent;color:#465363;cursor:pointer;transition:border-color .18s ease,color .18s ease,background .18s ease}.mapping-answer.empty{cursor:default}.mapping-answer.filled{background:transparent}.mapping-answer.correct{border-color:#52b997;color:var(--green)}.mapping-answer.wrong{border-color:#dc8f96;color:var(--red);animation:mappingWrong .28s ease}.mapping-grapheme{font:700 24px/1 Georgia,serif}.mapping-row.drop-ready .mapping-answer{border-color:var(--blue);background:#f6f9ff}.assemble.complete{padding:0}.mapping-summary{width:100%;display:grid;grid-template-columns:repeat(var(--slot-count),minmax(0,1fr));overflow:hidden;border:0;border-bottom:1px solid #d4deed;border-radius:0;background:#f7f9fe}.mapping-summary-segment{position:relative;min-width:0;height:76px;display:flex;align-items:center;justify-content:center;padding:0 14px;border:0;background:transparent;color:#405168;cursor:pointer;transition:background .16s ease,color .16s ease}.mapping-summary-segment+.mapping-summary-segment{border-left:1px solid #d4deed}.mapping-summary-segment:hover{background:#edf3ff;color:var(--blue)}.mapping-summary-segment:active{background:#e5edfd}.mapping-summary-segment.active{background:#edf3ff;color:var(--blue)}.mapping-summary-segment.active:after{content:"";position:absolute;right:0;bottom:0;left:0;height:3px;background:var(--blue)}.mapping-result{display:grid;grid-template-columns:32px auto;grid-template-rows:auto auto;align-items:center;justify-content:center;column-gap:10px}.mapping-result svg{grid-row:1/3;width:32px;height:32px;padding:7px;border-radius:50%;background:#e7efff;color:var(--blue);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.mapping-result .mapping-grapheme{font-size:21px;text-align:left}.mapping-result small{margin-top:4px;color:inherit;font:600 13px/1 "Charis SIL","Noto Sans",sans-serif;text-align:left;opacity:.72}.assemble .mapping-choices{width:min(100%,220px);margin:42px auto 0;gap:12px}.assemble .mapping-choices .sound-choice{height:50px}.mapping-choices.busy{pointer-events:none}.mapping-choices .sound-choice{transition:opacity .18s ease,transform .16s ease,border-color .16s ease,background .16s ease}.mapping-choices .sound-choice.used{visibility:hidden}.mapping-choices .sound-choice.playing{border-color:var(--blue);background:var(--blue-soft);transform:translateY(-1px)}@keyframes mappingWrong{25%{transform:translateX(-4px)}55%{transform:translateX(4px)}80%{transform:translateX(-2px)}}
+    #practicePage{min-height:100%}#practicePage .assembly-action{position:sticky;z-index:8;bottom:-24px;margin-top:auto;margin-right:-22px;margin-left:-22px;padding:14px 22px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:rgba(255,255,255,.97);box-shadow:0 -10px 24px rgba(31,43,58,.06)}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+<style>
+  /* Keep the selected sound and its explanation visually connected. */
+  .assembly-concept.show { margin-top: 3px; }
+  .assembly-concept .concept-card { padding-top: 13px; }
+  .assembly-concept .concept-heading {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    font-size: 17px;
+    font-weight: 750;
+    color: #263142;
+  }
+  .assembly-concept .concept-title { display: none; }
+  .assembly-concept #conceptDescription {
+    margin: 0 0 14px;
+    color: #5f6d80;
+  }
+  .assembly-concept #conceptDescription strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+    line-height: 1.4;
+    color: #263142;
+  }
+  .assembly-concept #conceptDescription span {
+    display: block;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .recording-review {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid var(--line);
+  }
+  .recording-review h3,
+  .recording-compact strong {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .recording-play {
+    min-width: 88px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 14px;
+    border: 1px solid #c8d9f8;
+    border-radius: 12px;
+    background: #f4f8ff;
+    color: var(--blue);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .recording-play svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .advice-heading {
+    margin: 14px 0 2px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .recording-compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 13px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+  }
+  .feedback-points .knowledge-point:first-child .grapheme { background: #ccecf5; }
+  .feedback-points .knowledge-point:last-child .grapheme { background: var(--purple-soft); }
+  .feedback-points .knowledge-point:first-child b { color: #176d91; }
+  .feedback-points .knowledge-point:last-child b { color: var(--purple); }
+  .top { position: relative; z-index: 20; }
+  .counter {
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 1px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .counter svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform .18s ease;
+  }
+  .counter[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .step-menu {
+    position: absolute;
+    top: 67px;
+    right: 15px;
+    width: 210px;
+    display: none;
+    gap: 2px;
+    padding: 7px;
+    border: 1px solid #dfe5ec;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 14px 34px rgba(33,43,57,.16);
+  }
+  .step-menu.show { display: grid; animation: enter .18s ease; }
+  .step-menu button {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    align-items: center;
+    gap: 9px;
+    min-height: 44px;
+    padding: 7px 9px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #445061;
+    text-align: left;
+    cursor: pointer;
+  }
+  .step-menu button:hover,
+  .step-menu button.current { background: var(--blue-soft); color: var(--blue); }
+  .step-number {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #eef1f5;
+    color: #727d8a;
+    font-size: 12px;
+    font-weight: 750;
+  }
+  .step-menu button.current .step-number { background: var(--blue); color: #fff; }
+  .step-label { font-size: 14px; font-weight: 650; }
+  .mapping-summary.three-parts .mapping-summary-segment { padding: 0 5px; }
+  .mapping-summary.three-parts .mapping-result { grid-template-columns: 27px auto; column-gap: 6px; }
+  .mapping-summary.three-parts .mapping-result svg { width: 27px; height: 27px; padding: 6px; }
+  .mapping-summary-segment.silent { color: #7c8591; }
+  .mapping-summary-segment.silent .mapping-result { grid-template-columns: auto; grid-template-rows: auto auto; column-gap: 0; }
+  .mapping-summary-segment.silent .mapping-grapheme,
+  .mapping-answer.silent-preview .mapping-grapheme { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+  .mapping-summary-segment.silent small { font-size: 12px; font-weight: 650; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+  .target-page { justify-content: center; text-align: center; }
+  .target-copy { width: 100%; margin: auto 0; }
+  .target-page .target-copy h1 { margin: 0; color: #253044; font-size: 32px; line-height: 1.3; letter-spacing: 0; }
+  .target-sounds { margin:12px 0 0; color:var(--blue); font:600 22px/1.3 "Charis SIL","Noto Sans",sans-serif; }
+  .assembly-card.result-mode {
+    overflow: hidden;
+    border: 1px solid #d8e4f7;
+    border-radius: 16px;
+    background: #fff;
+  }
+  .assembly-card.result-mode .assemble { background: #f7f9fe; }
+  .assembly-card.result-mode .mapping-summary {
+    margin-bottom: 0;
+    border-bottom: 1px solid #d4deed;
+    background: #f7f9fe;
+  }
+  .assembly-card.result-mode .result-note { display: none; }
+  .assembly-card.result-mode .mapping-summary-segment.active { background: #edf3ff; }
+  .assembly-card.result-mode .assembly-concept,
+  .assembly-card.result-mode .assembly-concept.show {
+    margin-top: 0;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+  }
+  .assembly-card.result-mode .assembly-concept .concept-card { padding: 23px 18px 21px; }
+  .assembly-card.result-mode .mouth-media { margin-top: 16px; }
+  .assembly-card.result-mode .mouth-media img { padding: 7px; }
+  .mapping-row.silent-preview-row { pointer-events: none; }
+  .mapping-answer.silent-preview {
+    position: relative;
+    border-bottom: 0;
+    color: #7c8591;
+    cursor: default;
+  }
+  .silent-preview-copy {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max-content;
+    text-align: center;
+    transform: translate(-50%,-12px);
+  }
+  .silent-preview-copy small {
+    position: static;
+    display: block;
+    margin-top: 5px;
+    transform: none;
+    color: #8a929c;
+    font: 650 13px/1 "Charis SIL","Noto Sans",sans-serif;
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+  }
+  .dock > .text-action { margin: 0 auto 10px; }
+  .speech-actions.paired { grid-template-columns: minmax(0,1fr) minmax(0,1.35fr); gap: 12px; }
+  .speech-actions.paired .primary { min-height: 52px; }
+  .speech-actions.paired #retryButton { border: 1px solid #c8d8f5; background: #fff; color: var(--blue); }
+  .speech-actions.paired #retryButton:hover { border-color: #9ebaf0; background: #f5f8ff; }
+  .listening-page { padding-top: 18px; }
+  .listening-page h1 { margin-bottom: 0; font-size: 22px; letter-spacing: -.02em; }
+  .listening-stage { flex: 1; display: flex; flex-direction: column; }
+  .prompt-audio {
+    width: 112px;
+    height: 112px;
+    display: grid;
+    place-items: center;
+    margin: 54px auto 52px;
+    padding: 0;
+    border: 0;
+    border-radius: 28px;
+    background: var(--blue);
+    color: #fff;
+    box-shadow: 0 8px 0 #2864d4;
+    cursor: pointer;
+  }
+  .prompt-audio:hover { background: #3c80f7; }
+  .prompt-audio:active { transform: translateY(4px); box-shadow: 0 4px 0 #2864d4; }
+  .prompt-audio svg { width: 58px; height: 58px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .listening-options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+  .listening-option {
+    position: relative;
+    min-height: 118px;
+    padding: 20px 16px;
+    border: 1.5px solid #d7dee8;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color .16s ease,background .16s ease,color .16s ease,transform .16s ease;
+  }
+  .listening-option:hover { border-color: #a9c2ef; background: #f8faff; }
+  .listening-option:active { transform: scale(.985); }
+  .listening-option.selected { border-color: var(--blue); background: var(--blue-soft); color: #245fc8; }
+  .listening-option.correct { border-color: #6cc9aa; background: var(--green-soft); color: var(--green); }
+  .listening-option.wrong { border-color: #df969c; background: var(--red-soft); color: var(--red); }
+  .listening-word { display: block; font: 650 29px/1.15 Georgia,"Iowan Old Style",serif; }
+  .listening-reveal {
+    display: none;
+    margin-top: 26px;
+    overflow: hidden;
+    border: 1px solid #d7e3f6;
+    border-radius: 16px;
+    background: #fff;
+  }
+  .listening-reveal.show { display: block; animation: enter .28s ease; }
+  .listening-reveal-head {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 44px;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    background: #f4f7ff;
+  }
+  .listening-phoneme { margin: 0; font: 650 38px/1 "Charis SIL","Noto Sans",sans-serif; letter-spacing: -.03em; }
+  .listening-reveal .phoneme-play-large { width: 44px; height: 44px; }
+  .listening-reveal .phoneme-position { padding: 16px 20px 17px; font-size: 15px; }
+  .listening-reveal .spelling-family { grid-template-columns: 62px minmax(0,1fr); gap: 16px; padding: 15px 20px 18px; }
+  .listening-reveal .spelling-key { min-height: 46px; font-size: 24px; }
+  .listening-reveal .spelling-examples { font-size: 19px; }
+  .listening-page .bottom-action { position: sticky; bottom: -24px; margin-right: -22px; margin-left: -22px; padding: 14px 22px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: rgba(255,255,255,.96); }
+  .phoneme-page { padding-top: 18px; }
+  .phoneme-card {
+    margin-top: 20px;
+    overflow: hidden;
+    border: 1px solid #d7e3f6;
+    border-radius: 18px;
+    background: #fff;
+  }
+  .phoneme-hero {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 50px;
+    align-items: center;
+    gap: 18px;
+    padding: 27px 24px 24px;
+    background: #f4f7ff;
+  }
+  .phoneme-symbol {
+    margin: 0;
+    color: #1f2a3a;
+    font: 650 52px/1 "Charis SIL","Noto Sans",sans-serif;
+    letter-spacing: -.03em;
+  }
+  .phoneme-play-large {
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid #c9daf8;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--blue);
+    cursor: pointer;
+  }
+  .phoneme-play-large:hover { border-color: #9dbbf2; background: #edf3ff; }
+  .phoneme-play-large:active { transform: scale(.96); }
+  .phoneme-play-large svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .phoneme-position {
+    margin: 0;
+    padding: 21px 24px 22px;
+    border-top: 1px solid #e2e9f4;
+    color: #536173;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .spelling-family {
+    display: grid;
+    grid-template-columns: 72px minmax(0,1fr);
+    align-items: center;
+    gap: 20px;
+    padding: 19px 24px 22px;
+    border-top: 1px solid #e2e9f4;
+  }
+  .spelling-key {
+    display: grid;
+    place-items: center;
+    min-height: 52px;
+    border-radius: 13px;
+    background: var(--blue);
+    color: #fff;
+    font: 650 27px/1 Georgia,"Iowan Old Style",serif;
+  }
+  .spelling-examples { color: #5d6878; font: 500 22px/1.4 Georgia,"Iowan Old Style",serif; }
+  .phoneme-page .bottom-action { position: sticky; bottom: -24px; margin-right: -22px; margin-left: -22px; padding: 14px 22px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: rgba(255,255,255,.97); }
+  .phoneme-page { padding-top: 8px; }
+  .phoneme-card { margin-top: 0; overflow: visible; border: 0; border-radius: 0; }
+  .phoneme-heading { margin: 0 0 16px; color: #657083; font-size: 19px; font-weight:650; line-height: 1.35; letter-spacing: -.01em; }
+  .phoneme-conclusion { margin-top:20px; overflow:hidden; border:1px solid #cfddf7; border-radius:16px; background:#f2f6ff; animation:conclusionReveal .36s .1s both; }
+  .phoneme-hero { display:flex; align-items:center; justify-content:center; gap:11px; padding:22px 18px 20px; }
+  @keyframes conclusionReveal { from { opacity:.45; transform:translateY(5px); } to { opacity:1; transform:none; } }
+  .phoneme-grapheme { color:#2866d4; font:700 38px/1 Georgia,"Iowan Old Style",serif; }
+  .phoneme-arrow { color:#6f7d91; font-size:30px; line-height:1; }
+  .phoneme-symbol { margin:0; color:#2866d4; font:700 40px/1 "Charis SIL","Noto Sans",sans-serif; }
+  .phoneme-play-large { width:48px; height:48px; margin-left:5px; border:0; background:#fff; box-shadow:0 3px 12px rgba(48,81,139,.1); }
+  .phoneme-examples { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; overflow:visible; border:0; border-radius:0; background:transparent; }
+  .phoneme-example { min-width:0; min-height:94px; display:grid; grid-template-columns:minmax(0,1fr) 38px; align-items:center; gap:8px; padding:14px; border:1px solid #e0e5ec; border-radius:14px; background:#fff; }
+  .phoneme-example + .phoneme-example { border-top:1px solid #e0e5ec; }
+  .phoneme-example-word { margin: 0 0 5px; color: #29313e; font: 600 20px/1.1 Georgia,"Iowan Old Style",serif; }
+  .phoneme-example-word .target { color: #2f65cc; }
+  .phoneme-example-meta { color: #7b8491; font-size: 13px; }
+  .phoneme-example-play { width:38px; height:38px; display:grid; place-items:center; padding:0; border:0; border-radius:50%; background:#f4f7fb; color:var(--blue); cursor:pointer; }
+  .phoneme-example-play:hover { background: #eaf1ff; }
+  .phoneme-example-play:active { transform: scale(.95); }
+  .phoneme-example-play svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .phoneme-mouth { position:relative; overflow:hidden; margin:0 12px 12px; border-radius:12px; aspect-ratio:16/9; background:#e7e9ed; }
+  .phoneme-mouth img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .phoneme-mouth .media-play { width: 50px; height: 50px; }
+  .phoneme-page.rule-confirmation .phoneme-card { margin-top: 10px; }
+  .phoneme-page.rule-confirmation .phoneme-heading { margin-bottom: 18px; color: var(--ink); font-size: 22px; font-weight: 750; }
+  .phoneme-page.rule-confirmation .phoneme-examples { display: none; }
+  .phoneme-page.rule-confirmation .phoneme-conclusion { margin-top: 0; }
+  .phoneme-explanation { margin: 0; padding: 0 20px 18px; color: #59677a; font-size: 15px; line-height: 1.65; }
+  #practicePage:not(.speaking-mode) #practiceTitle { margin-bottom: 38px; font-size: 22px; }
+  #practicePage:not(.speaking-mode) .practice-reference { width: min(100%,360px); margin: 0 auto; }
+  #practicePage:not(.speaking-mode) .practice-reference .word-layout { width:max-content; max-width:100%; margin:0 auto; grid-template-columns:42px auto; }
+  #practicePage:not(.speaking-mode) .assemble { width: min(100%,360px); margin: 34px auto 0; }
+  #practicePage:not(.speaking-mode) .assemble .slots { gap: 16px; }
+  #practicePage:not(.speaking-mode) .assemble .choices { width: 100%; margin-top: 46px; gap: 14px; }
+  #practicePage:not(.speaking-mode) .assemble .sound-choice { height: 66px; border-color: #cbdaf4; border-radius: 15px; background: #f7f9ff; }
+  .mapping-answer.filled { color: #929dab; }
+  .mapping-answer.correct { color: var(--green); }
+  .mapping-answer.wrong { color: var(--red); }
+  .mapping-two-layer { width: min(100%,360px); margin: 0 auto; }
+  .mapping-guide,.mapping-sound-slots { display:grid; grid-template-columns:repeat(var(--guide-count),minmax(0,1fr)); gap:14px; }
+  .mapping-guide { margin-bottom:8px; color:#687486; font:650 18px/1 Georgia,serif; text-align:center; }
+  .mapping-guide span { padding-bottom:8px; }
+  .mapping-sound-slots .mapping-row { padding:0 2px; }
+  .mapping-sound-slots .mapping-answer { height:58px; }
+  .mapping-answer .filled-wave { display:flex; align-items:center; justify-content:center; gap:3px; color:#7d8998; }
+  .mapping-answer.correct .filled-wave { color:var(--green); }
+  .mapping-answer.wrong .filled-wave { color:var(--red); }
+  .filled-wave i { display:block; width:3px; border-radius:4px; background:currentColor; }
+  .filled-wave i:nth-child(1),.filled-wave i:nth-child(6){height:9px}.filled-wave i:nth-child(2),.filled-wave i:nth-child(5){height:18px}.filled-wave i:nth-child(3){height:27px}.filled-wave i:nth-child(4){height:22px}
+  #practicePage:not(.speaking-mode) .mapping-two-layer { width:min(100%,360px); }
+  .mapping-units { display:grid; grid-template-columns:repeat(var(--guide-count),minmax(0,1fr)); gap:14px; }
+  .mapping-unit { min-width:0; padding:15px 14px 10px; border:1px solid #e0e6ef; border-radius:15px; background:#fff; box-shadow:0 7px 18px rgba(43,57,77,.07); }
+  .mapping-unit.result-clickable { cursor:pointer; transition:transform .16s ease,border-color .16s ease,background .16s ease; }
+  .mapping-unit.result-clickable:hover { transform:translateY(-2px); border-color:#a9c9bd; background:#fbfffd; }
+  .mapping-unit.result-clickable:active { transform:translateY(0); }
+  .mapping-unit.result-clickable:focus-visible { outline:3px solid rgba(52,120,246,.28); outline-offset:2px; }
+  .mapping-unit-label { display:block; margin-bottom:3px; color:#687486; font:650 19px/1 Georgia,serif; text-align:center; }
+  .mapping-unit .mapping-row { padding:0; }
+  .mapping-unit .mapping-answer { height:58px; }
+  .mapping-choices .sound-choice { cursor:grab; }
+  .mapping-choices .sound-choice:active { cursor:grabbing; }
+  .silent-sound-mark { height:58px; display:grid; place-items:center; color:#9ba4b0; font:600 20px/1 "Charis SIL","Noto Sans",sans-serif; }
+  .rule-page { padding-top: 28px; }
+  .rule-page > h1 { display:block; }
+  .rule-page h1 { margin:0 0 28px; font-size:23px; line-height:1.35; letter-spacing:0; }
+  .rule-evidence { overflow:hidden; border:1px solid #dfe5ec; border-radius:16px; background:#fff; }
+  .rule-word { min-height:92px; display:grid; grid-template-columns:1fr 44px; align-items:center; gap:12px; padding:14px 16px; }
+  .rule-word + .rule-word { border-top:1px solid #e3e8ef; }
+  .rule-copy { display:grid; gap:5px; }
+  .rule-copy strong { font:600 27px/1.05 Georgia,"Charis SIL",serif; }
+  .rule-copy mark { padding:0; background:transparent; color:var(--blue); }
+  .rule-copy small { color:#7d8795; font-size:14px; }
+  .rule-audio { width:42px; height:42px; display:grid; place-items:center; padding:0; border:0; border-radius:50%; background:#f3f7ff; color:var(--blue); cursor:pointer; }
+  .rule-audio:hover { background:#e8f0ff; }
+  .rule-audio:active { transform:scale(.95); }
+  .rule-audio svg { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .rule-question { margin:68px 0 36px; }
+  .rule-question h2 { display:flex; align-items:baseline; min-height:30px; margin:0 0 30px; color:#566273; font-size:21px; line-height:30px; }
+  .rule-key,.rule-answer { color:var(--blue); }
+  .rule-key { font-family:Georgia,"Charis SIL",serif; font-weight:700; }
+  .rule-value { display:inline-flex; align-items:baseline; min-width:70px; height:30px; margin-left:4px; line-height:30px; }
+  .rule-blank { border-bottom:2px solid #aab5c3; color:transparent; }
+  .sound-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+  .sound-option { min-height:88px; display:grid; place-items:center; padding:0; border:1px solid #cbdaf4; border-radius:15px; background:#f7f9ff; color:var(--blue); cursor:pointer; }
+  .sound-option:hover { border-color:#9ebcf2; background:#f1f6ff; }
+  .sound-option:active { transform:scale(.985); }
+  .sound-option.selected { border-color:var(--blue); background:#eaf1ff; }
+  .sound-option.correct { border-color:#62c5a4; background:var(--green-soft); color:var(--green); }
+  .sound-option.wrong { border-color:#df969c; background:var(--red-soft); color:var(--red); }
+  .sound-option .option-wave { display:flex; align-items:center; justify-content:center; gap:4px; color:currentColor; }
+  .sound-option .option-wave i { display:block; width:4px; border-radius:4px; background:currentColor; }
+  .sound-option .option-wave i:nth-child(1),.sound-option .option-wave i:nth-child(5){height:14px}.sound-option .option-wave i:nth-child(2),.sound-option .option-wave i:nth-child(4){height:27px}.sound-option .option-wave i:nth-child(3){height:38px}
+  .rule-page .bottom-action { position:sticky; bottom:-24px; margin:auto -22px -24px; padding:14px 22px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--line); background:rgba(255,255,255,.97); }
+  .comparison-page { padding-top:28px; }
+  .comparison-page h1 { margin:0 0 42px; font-size:23px; line-height:1.4; }
+  .comparison-words { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+  .comparison-word {
+    min-height:122px;
+    display:grid;
+    grid-template-columns:24px minmax(0,1fr);
+    align-items:center;
+    gap:7px;
+    padding:18px 12px;
+    border:1px solid #dbe3ee;
+    border-radius:15px;
+    background:#fff;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .comparison-word:hover { border-color:#abc2ec; background:#f9fbff; }
+  .comparison-word:active { transform:scale(.985); }
+  .comparison-word.playing { border-color:#9fbbef; background:#f3f7ff; }
+  .comparison-audio { width:24px; height:24px; display:grid; place-items:center; color:var(--blue); }
+  .comparison-audio svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .comparison-copy { min-width:0; display:grid; gap:8px; }
+  .comparison-copy strong { font:600 20px/1.1 Georgia,"Charis SIL",serif; white-space:nowrap; }
+  .comparison-copy mark { padding:0; background:transparent; color:var(--blue); }
+  .comparison-copy small { color:#7b8593; font-size:14px; }
+  .comparison-options { display:grid; gap:14px; margin-top:50px; }
+  .comparison-option { min-height:58px; border:1px solid #d5dde8; border-radius:14px; background:#fff; color:#3c4655; font-weight:700; cursor:pointer; }
+  .comparison-option:hover { border-color:#a9c1ee; background:#f8faff; }
+  .comparison-option:active { transform:scale(.99); }
+  .comparison-option.selected { border-color:var(--blue); background:var(--blue-soft); color:#285fc8; }
+  .comparison-option.correct { border-color:#65c5a5; background:var(--green-soft); color:var(--green); }
+  .comparison-option.wrong { border-color:#df969c; background:var(--red-soft); color:var(--red); }
+  .comparison-result { display:none; margin-top:30px; padding:24px 2px 0; border-top:1px solid #dce4ef; color:#536173; }
+  .comparison-result.show { display:block; animation:enter .25s ease; }
+  .comparison-conclusion { display:flex; align-items:baseline; justify-content:center; gap:8px; min-height:44px; color:#657184; font-size:15px; line-height:1.5; }
+  .comparison-conclusion strong { color:var(--blue); font:700 25px/1.2 Georgia,serif; }
+  .comparison-conclusion b { color:var(--blue); font:700 22px/1.2 "Charis SIL","Noto Sans",sans-serif; }
+  .comparison-page .bottom-action { position:sticky; bottom:-24px; margin:auto -22px -24px; padding:14px 22px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--line); background:rgba(255,255,255,.97); }
+  .target { color:var(--blue); }
+.challenge-badge { display:inline-flex; align-items:center; min-height:25px; padding:3px 9px; border:1px solid #d8d6f2; border-radius:7px; background:#f3f2ff; color:#625fa8; font-size:13px; font-weight:700; line-height:1; }
+.word-hint {
+  margin: 8px 10px 0;
+  padding-top: 10px;
+  border-top: 1px solid #e4e9f0;
+  color: #687483;
+  font-size: 13px;
+  line-height: 1.45;
+}
+  #practicePage.speaking-mode #practiceTitle { display:flex !important; align-items:center; gap:10px; }
+  #practicePage.speaking-mode .phrase-word { font-size:27px; line-height:1.25; white-space:nowrap; }
+.target { color:var(--blue); }
+.target.challenge-target { color:#7a74cf; }
+.transfer-note { margin-top:22px; padding:18px 16px 16px; border:1px solid #d8e4f7; border-radius:14px; background:#fff; }
+.transfer-note h3 { margin:0; padding-bottom:12px; border-bottom:1px solid #e2e8f1; color:var(--ink); font-size:17px; line-height:1.35; }
+.spelling-page { padding-top:20px; }
+.spelling-page h1 { margin:0 0 12px; color:var(--ink); font-size:22px; line-height:1.4; }
+.spelling-summary { margin:0 0 22px; color:#657184; font-size:14px; line-height:1.7; }
+.spelling-list { display:grid; gap:14px; padding-bottom:12px; }
+.spelling-group { min-height:94px; display:grid; grid-template-columns:64px minmax(0,1fr); overflow:hidden; border:1px solid #e0e5ec; border-radius:14px; background:#fff; }
+.spelling-group-head { display:grid; place-items:center; min-width:0; border-right:1px solid #e5e9f0; background:#f7f9fd; }
+.spelling-group-head h2 { margin:0; color:#2f65cc; font:600 24px/1.1 Georgia,"Iowan Old Style",serif; }
+.spelling-divider { margin:12px 0 -4px; color:#657184; font-size:14px; line-height:1.65; }
+.spelling-example { min-height:92px; display:grid; grid-template-columns:minmax(0,1fr) 38px; align-items:center; gap:8px; padding:14px; background:#fff; }
+.spelling-example-copy { min-width:0; }
+.spelling-example-word { margin:0 0 5px; color:#29313e; font:600 20px/1.1 Georgia,"Iowan Old Style",serif; }
+.spelling-example-word mark { background:none; color:var(--blue); }
+.spelling-example-meta { color:#7b8491; font-size:13px; line-height:1.4; }
+.spelling-example-play { width:38px; height:38px; display:grid; place-items:center; padding:0; border:0; border-radius:50%; background:#f4f7fb; color:var(--blue); cursor:pointer; }
+.spelling-example-play:hover { background:#eaf1ff; }
+.spelling-example-play:active { transform:scale(.95); }
+.spelling-example-play svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.spelling-page .bottom-action { position:sticky; bottom:-24px; margin:auto -22px -24px; padding:14px 22px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--line); background:rgba(255,255,255,.97); }
+.transfer-rule { margin:14px 0 16px; color:#556273; font-size:14px; line-height:1.6; }
+.transfer-rule strong { color:#2d6cd8; font:700 17px/1.2 Georgia,serif; }
+.transfer-spellings { display:grid; overflow:hidden; border:1px solid #dde5f0; border-radius:11px; background:#f8faff; }
+.transfer-spelling-row { min-height:46px; display:grid; grid-template-columns:1fr 34px 1fr; align-items:center; padding:0 16px; }
+.transfer-spelling-row+.transfer-spelling-row { border-top:1px solid #e2e8f1; }
+.transfer-spelling-row b { color:#3f4b5b; font:700 19px/1.2 Georgia,serif; }
+.transfer-spelling-row span { color:#8a96a5; text-align:center; }
+.transfer-spelling-row em { color:#2d6cd8; font:700 17px/1.2 "Charis SIL","Noto Sans",sans-serif; font-style:normal; text-align:right; }
+</style>
+</head>
+<body>
+<main class="app"><div class="device"><section class="phone">
+  <header class="top"><button class="back" aria-label="返回" onclick="history.back()"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><div class="progress"><span id="progressBar"></span></div><button class="counter" id="counter" aria-label="打开题目目录" aria-expanded="false" onclick="toggleStepMenu(event)"><span id="counterText">1/12</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 10 4 4 4-4"/></svg></button><nav class="step-menu" id="stepMenu" aria-label="跳转题目"></nav></header>
+  <main class="content">
+    <section class="page rule-page" id="rulePage"><h1 id="ruleTitle">听单词发音，完成题目：</h1><div class="rule-evidence"><div class="rule-word"><div class="rule-copy"><strong>s<mark>ou</mark>fflé</strong><small>/su.fle/　苏芙蕾</small></div><button class="rule-audio" aria-label="播放 soufflé" onclick="playWord('soufflé')"><svg viewBox="0 0 24 24"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg></button></div></div><div class="rule-question"><h2>选择正确的声音</h2><div class="sound-options"><button class="sound-option" data-answer="u" aria-label="试听声音选项一" onclick="selectRuleSound('u')"><span class="option-wave"><i></i><i></i><i></i><i></i><i></i></span></button><button class="sound-option" data-answer="i" aria-label="试听声音选项二" onclick="selectRuleSound('i')"><span class="option-wave"><i></i><i></i><i></i><i></i><i></i></span></button></div></div><div class="bottom-action"><button class="primary" id="ruleCheck" disabled onclick="checkRuleSound()">确认</button></div></section>
+    <section class="page active target-page" id="targetPage"><div class="target-copy"><h1>法语发音学习</h1><p class="target-sounds">/u/ · /i/</p></div><button class="primary" onclick="showRulePage()">开始学习</button></section>
+    <section class="page phoneme-page" id="phonemePage"><article class="phoneme-card"><h1 class="phoneme-heading">发音讲解</h1><div class="phoneme-examples" id="phonemeExamples"></div><div class="phoneme-conclusion"><div class="phoneme-hero"><span class="phoneme-grapheme" id="phonemeGrapheme">ou</span><span class="phoneme-arrow">→</span><h2 class="phoneme-symbol" id="phonemeSymbol">/u/</h2><button class="phoneme-play-large" id="phonemePlay" aria-label="播放 /u/" onclick="playCurrentPhoneme()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/><path d="M17.8 6.8a7.4 7.4 0 0 1 0 10.4"/></svg></button></div><p class="phoneme-explanation" id="phonemeExplanation">双唇收圆，舌头向后，听起来接近中文中的“乌”。</p><figure class="phoneme-mouth"><img id="phonemeMouthImage" src="assets/u-mouth-guide.jpg" alt="法语 /u/ 口型示意"><button class="media-play" aria-label="播放口型示范视频"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg></button></figure></div></article><div class="bottom-action"><button class="primary" id="phonemeNext" onclick="continueFromPhoneme()">继续</button></div></section>
+    <section class="page" id="learnPage">
+      <article class="lesson-card"><div class="word-card"><div class="word-layout"><div class="audio-actions"><button class="audio-button" aria-label="听完整发音" onclick="playWord('soufflé')"><svg viewBox="0 0 24 24"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/><path d="M17.8 6.8a7.4 7.4 0 0 1 0 10.4"/></svg></button><button class="audio-button" aria-label="慢慢听清" onclick="playTeachingWord('soufflé')">慢</button></div><div><div class="ipa">/su.fle/</div><p class="word" id="learnWord">soufflé</p><div class="meaning">苏芙蕾</div></div></div></div><div class="knowledge-wrap" id="concept"><section class="concept-card"><div class="concept-title"><strong>ou</strong><span>→ /u/</span><button class="phoneme-play" aria-label="播放 /u/ 的发音" onclick="speak('ou',.7)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg></button></div><p>双唇收圆，舌头向后；听起来接近中文“乌”。</p><figure class="mouth-media"><img src="assets/u-mouth-guide.jpg" alt="法语 /u/ 的嘴唇与口腔发音位置示意"><button class="media-play" aria-label="播放口型示范视频"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg></button></figure></section></div></article>
+      <div class="bottom-action"><button class="primary" id="learnNext" disabled onclick="showPractice(0)">继续</button></div>
+    </section>
+    <section class="page" id="practicePage"><h1 id="practiceTitle">拼出单词的发音：</h1><div id="referenceCard"></div><article class="assembly-card" id="assemblyCard"><section class="assemble" id="assemble"><div class="slots" id="slots"></div><div class="choices" id="choices"></div><p class="result-note" id="resultNote"></p></section><div class="assembly-concept" id="assemblyConcept"><section class="concept-card"><div class="concept-title"><strong id="conceptGrapheme">ou</strong><span id="conceptPhoneme">→ /u/</span><button class="phoneme-play" id="conceptAudio" aria-label="播放 /u/ 的发音" onclick="speak('ou',.7)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg></button></div><p id="conceptDescription">/u/：双唇收圆，舌头向后，听起来接近中文中的“乌”。</p><figure class="mouth-media" id="mouthMedia"><img src="assets/u-mouth-guide.jpg" alt="法语 /u/ 的嘴唇与口腔发音位置示意"><button class="media-play" aria-label="播放口型示范视频"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg></button></figure></section></div></article><div class="assembly-action" id="assemblyAction"><button class="primary" id="checkButton" disabled onclick="checkAssembly()">确认</button></div><section class="speaking" id="speaking"><div class="speech-feedback" id="speechFeedback"></div><div class="loader" id="loader"></div><div class="dock"><div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i></div><button class="text-action" id="skipButton" onclick="skipSpeaking()">现在不做口语题</button><button class="mic" id="mic" aria-label="开始跟读" onclick="record()"><svg viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="12" rx="4"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></button><div class="speech-actions"><button class="primary" id="retryButton" onclick="retryRecording()">重新录音</button><button class="primary" id="nextButton" onclick="nextPractice()">继续</button></div></div></section></section>
+    <section class="page listening-page" id="listeningPage"><div class="listening-stage"><h1>你听到了什么？</h1><button class="prompt-audio" id="listeningPrompt" aria-label="再听一遍" onclick="playWord(listeningTarget)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4Z"/><path d="M16 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a8.5 8.5 0 0 1 0 12"/></svg></button><div class="listening-options" id="listeningOptions"><button class="listening-option" data-word="sous" onclick="selectListeningAnswer('sous')"><span class="listening-word">sous</span></button><button class="listening-option" data-word="si" onclick="selectListeningAnswer('si')"><span class="listening-word">si</span></button></div><article class="listening-reveal" id="listeningReveal"><div class="listening-reveal-head"><h2 class="listening-phoneme" id="listeningPhoneme">/u/</h2><button class="phoneme-play-large" id="listeningPhonemePlay" aria-label="播放 /u/" onclick="playListeningPhoneme()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/><path d="M17.8 6.8a7.4 7.4 0 0 1 0 10.4"/></svg></button></div><p class="phoneme-position" id="listeningPosition"></p><div class="spelling-family"><span class="spelling-key" id="listeningSpelling">ou</span><span class="spelling-examples" id="listeningExamples">sous · cou</span></div></article></div><div class="bottom-action"><button class="primary" id="listeningCheck" disabled onclick="checkListeningAnswer()">确认</button></div></section>
+    <section class="page comparison-page" id="comparisonPage"><h1>高亮部分的发音相同吗？</h1><div class="comparison-words"><button class="comparison-word" data-comparison-word="sandwich" onclick="playComparisonWord('sandwich',this)" aria-label="播放 sandwich"><span class="comparison-audio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg></span><span class="comparison-copy"><strong>sandw<mark>i</mark>ch</strong><small>三明治</small></span></button><button class="comparison-word" data-comparison-word="stylo" onclick="playComparisonWord('stylo',this)" aria-label="播放 stylo"><span class="comparison-audio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg></span><span class="comparison-copy"><strong>st<mark>y</mark>lo</strong><small>圆珠笔</small></span></button></div><div class="comparison-options"><button class="comparison-option" data-comparison-answer="same" onclick="selectComparisonAnswer('same')">相同</button><button class="comparison-option" data-comparison-answer="different" onclick="selectComparisonAnswer('different')">不同</button></div><div class="comparison-result" id="comparisonResult"><div class="comparison-conclusion"><strong>y = i</strong><span>发音相同，都是</span><b>/i/</b></div></div><div class="bottom-action"><button class="primary" id="comparisonCheck" disabled onclick="checkComparisonAnswer()">确认</button></div></section>
+    <section class="page spelling-page" id="spellingPage"><h1 id="spellingTitle">读音为 /i/ 的字母</h1><p class="spelling-summary" id="spellingSummary"></p><div class="spelling-list" id="spellingRows"></div><div class="bottom-action"><button class="primary" id="spellingNext">继续</button></div></section>
+    <section class="page complete-page" id="completePage"><div class="complete-mark">✓</div><h1>发音练习完成</h1><button class="primary" onclick="restart()">再练一次</button></section>
+  </main>
+</section></div></main>
+<script>
+const practices=[
+ {word:'cou',ipa:'/ku/',meaning:'脖子',speakingStep:4,accepted:['cou','coup','coût','coups','coûts'],parts:[{text:'c',ipa:'/k/',audio:'que'},{text:'ou',ipa:'/u/',audio:'ou',target:true}],tips:[{g:'c',title:'/k/',body:'舌根抬起贴近软腭，短促放开，听起来接近中文中的“科”。',audio:'que'},{g:'ou',title:'/u/',body:'双唇收圆，舌头向后，听起来接近中文中的“乌”。',audio:'ou'}]},
+ {word:'si',ipa:'/si/',meaning:'如果',accepted:['si'],parts:[{text:'si',ipa:'/si/',audio:'si'}],tips:[{g:'i',title:'/i/',body:'嘴角向两侧展开，舌位靠前，听起来接近中文中的“衣”。',audio:'i'}]},
+ {word:'midi',ipa:'/mi.di/',meaning:'中午',speakingStep:9,accepted:['midi'],showConcept:false,spellingGuide:['mi','di'],parts:[{text:'mi',ipa:'/mi/',audio:'mi',target:true},{text:'di',ipa:'/di/',audio:'di',target:true}],order:[1,0],tips:[{g:'i',title:'/i/',body:'嘴角向两侧展开，舌位靠前，听起来接近中文中的“衣”。',audio:'i'}]},
+ {word:'goût',ipa:'/gu/',meaning:'味道',speakingStep:5,accepted:['goût','gout','goûts'],challenge:true,hint:'💡 oû 和 ou 的发音是一样的哦',parts:[{text:'g',ipa:'/g/',audio:'goût'},{text:'oû',ipa:'/u/',audio:'ou',target:true},{text:'t',ipa:'',audio:'',silent:true}],tips:[{g:'oû',title:'/u/',body:'双唇收圆，舌头向后，听起来接近中文中的“乌”。',audio:'ou'}]},
+ {word:'s’il vous plaît',ipa:'/sil vu plɛ/',meaning:'请',speakingStep:12,accepted:["s'il vous plaît","s il vous plaît","s'il vous plait","s il vous plait"],phrase:true,challenge:true,showConcept:false,parts:[],tips:[{g:'i',title:'/i/',body:'嘴角向两侧展开，舌位靠前，听起来接近中文中的“衣”。',audio:'i'},{g:'ou',title:'/u/',body:'双唇收圆，舌头向后，听起来接近中文中的“乌”。',audio:'ou'}]}
+];
+const totalSteps=12;
+document.querySelector('#stepMenu').innerHTML='<button data-step="1" onclick="jumpToStep(1)"><span class="step-number">1</span><span class="step-label">学习目标</span></button><button data-step="2" onclick="jumpToStep(2)"><span class="step-number">2</span><span class="step-label">发现 ou → /u/</span></button><button data-step="3" onclick="jumpToStep(3)"><span class="step-number">3</span><span class="step-label">讲解 /u/</span></button><button data-step="4" onclick="jumpToStep(4)"><span class="step-number">4</span><span class="step-label">读 cou</span></button><button data-step="5" onclick="jumpToStep(5)"><span class="step-number">5</span><span class="step-label">挑战 goût</span></button><button data-step="6" onclick="jumpToStep(6)"><span class="step-number">6</span><span class="step-label">拓展 /u/ 拼写</span></button><button data-step="7" onclick="jumpToStep(7)"><span class="step-number">7</span><span class="step-label">发现 i → /i/</span></button><button data-step="8" onclick="jumpToStep(8)"><span class="step-number">8</span><span class="step-label">讲解 /i/</span></button><button data-step="9" onclick="jumpToStep(9)"><span class="step-number">9</span><span class="step-label">读 midi</span></button><button data-step="10" onclick="jumpToStep(10)"><span class="step-number">10</span><span class="step-label">比较 i 和 y</span></button><button data-step="11" onclick="jumpToStep(11)"><span class="step-number">11</span><span class="step-label">拓展 /i/ 拼写</span></button><button data-step="12" onclick="jumpToStep(12)"><span class="step-number">12</span><span class="step-label">挑战读词组</span></button>';
+let practiceIndex=0,currentPhoneme='u',placed=[],selectedPart=null,draggedPart=null,slotDragFrom=null,didSlotDrag=false,checked=false,teachingRun=0,mediaRecorder=null,mediaStream=null,recordingChunks=[],recordingTimer=null,recordedAudioUrl='',mappedParts=[],activeMappingSlot=0,wrongMappingSlot=null,mappingBusy=false,selectedMappingChoice=null,mappingResultReady=false,selectedConceptPart=1,listeningChoice='',listeningChecked=false,listeningTarget='sous',listeningStep=1,comparisonChoice='',comparisonChecked=false;
+const $=id=>document.getElementById(id),waveHTML='<i></i><i></i><i></i><i></i><i></i><i></i>';
+let activeAudio=null;
+function voice(){const voices=speechSynthesis.getVoices();return voices.find(v=>v.lang.toLowerCase()==='fr-fr')||voices.find(v=>v.lang.toLowerCase().startsWith('fr'))}
+function stopPlayback(){if(activeAudio){activeAudio.onended=null;activeAudio.onerror=null;activeAudio.pause();activeAudio.currentTime=0;activeAudio=null}speechSynthesis.cancel()}
+function browserSpeak(text,rate=.82,onend){const u=new SpeechSynthesisUtterance(text);u.lang='fr-FR';u.rate=rate;u.voice=voice()||null;u.onend=()=>onend&&onend();speechSynthesis.speak(u);return u}
+function speak(text,rate=.82,onend){stopPlayback();return browserSpeak(text,rate,onend)}
+function setPage(id,step){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');const content=document.querySelector('.content');if(content)content.scrollTop=0;$('counterText').textContent=step+'/'+totalSteps;$('progressBar').style.width=(step/totalSteps*100)+'%';document.querySelectorAll('#stepMenu button').forEach(button=>button.classList.toggle('current',Number(button.dataset.step)===step));closeStepMenu()}
+function toggleStepMenu(event){event.stopPropagation();const menu=$('stepMenu'),show=!menu.classList.contains('show');menu.classList.toggle('show',show);$('counter').setAttribute('aria-expanded',String(show))}
+function closeStepMenu(){$('stepMenu')?.classList.remove('show');$('counter')?.setAttribute('aria-expanded','false')}
+function showTargetPage(){stopPlayback();setPage('targetPage',1)}
+function jumpToStep(step){if(step===1)return showTargetPage();if(step===2)return showRulePage();if(step===3)return showPhonemeCard('u',3);if(step===4)return showSpeakingPractice(0);if(step===5)return showSpeakingPractice(3);if(step===6)return showSpellingPage('u');if(step===7)return showIRulePage();if(step===8)return showPhonemeCard('i',8);if(step===9)return showSpeakingPractice(2);if(step===10)return showComparisonQuestion();if(step===11)return showSpellingPage('i');if(step===12)return showSpeakingPractice(4)}
+let ruleSound='',ruleChecked=false,ruleExpected='u',ruleReset=showRulePage;
+function ruleEvidenceHTML(word,display,ipa,meaning){return '<div class="rule-word"><div class="rule-copy"><strong>'+display+'</strong><small>'+ipa+'　'+meaning+'</small></div><button class="rule-audio" aria-label="播放 '+word+'" onclick="playWord(\''+word+'\')"><svg viewBox="0 0 24 24"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg></button></div>'}
+function prepareRulePage({grapheme,word,display,ipa,meaning,expected,step,reset}){stopPlayback();ruleSound='';ruleChecked=false;ruleExpected=expected;ruleReset=reset;$('ruleTitle').textContent='听单词发音，完成题目：';document.querySelector('.rule-evidence').innerHTML=ruleEvidenceHTML(word,display,ipa,meaning);document.querySelector('.rule-question h2').innerHTML='<span class="rule-key">'+grapheme+'</span><span>的发音是</span><span class="rule-value rule-blank">声音</span>';document.querySelectorAll('.sound-option').forEach(option=>option.className='sound-option');$('ruleCheck').disabled=true;$('ruleCheck').textContent='确认';$('ruleCheck').onclick=checkRuleSound;setPage('rulePage',step);setTimeout(()=>playWord(word),260)}
+function showRulePage(){prepareRulePage({grapheme:'ou',word:'soufflé',display:'s<mark>ou</mark>fflé',ipa:'/su.fle/',meaning:'苏芙蕾',expected:'u',step:2,reset:showRulePage})}
+function showIRulePage(){prepareRulePage({grapheme:'i',word:'sandwich',display:'sandw<mark>i</mark>ch',ipa:'/sɑ̃.dwitʃ/',meaning:'三明治',expected:'i',step:7,reset:showIRulePage})}
+function selectRuleSound(sound){if(ruleChecked)return;ruleSound=sound;document.querySelectorAll('.sound-option').forEach(option=>option.classList.toggle('selected',option.dataset.answer===sound));$('ruleCheck').disabled=false;speak(sound==='u'?'ou':'i',.72)}
+function checkRuleSound(){if(!ruleSound||ruleChecked)return;ruleChecked=true;const correct=ruleSound===ruleExpected;document.querySelectorAll('.sound-option').forEach(option=>{option.classList.remove('selected');if(option.dataset.answer===ruleSound)option.classList.add(correct?'correct':'wrong')});if(!correct){$('ruleCheck').disabled=true;setTimeout(ruleReset,720);return}document.querySelector('.rule-question h2').innerHTML='<span class="rule-key">'+(ruleExpected==='u'?'ou':'i')+'</span><span>的发音是</span><span class="rule-value rule-answer">/'+ruleExpected+'/</span>';$('ruleCheck').disabled=false;$('ruleCheck').textContent='继续';$('ruleCheck').onclick=ruleExpected==='u'?()=>showPhonemeCard('u',3):()=>showPhonemeCard('i',8)}
+function showPhonemeCard(phoneme,step){const cards={u:{symbol:'/u/',grapheme:'ou',audio:'ou',image:'assets/u-mouth-guide.jpg',explanation:'双唇收圆，舌头向后，听起来接近中文中的“乌”。'},i:{symbol:'/i/',grapheme:'i',audio:'i',image:'assets/i-mouth-guide.jpg',explanation:'嘴角向两侧展开，舌位靠前，听起来接近中文中的“衣”。'}};const card=cards[phoneme];currentPhoneme=phoneme;stopPlayback();$('phonemePage').classList.add('rule-confirmation');$('phonemeGrapheme').textContent=card.grapheme;$('phonemeSymbol').textContent=card.symbol;$('phonemeExplanation').textContent=card.explanation;$('phonemeExamples').innerHTML='';$('phonemeMouthImage').src=card.image;$('phonemeMouthImage').alt='法语 '+card.symbol+' 口型示意';$('phonemePlay').setAttribute('aria-label','播放 '+card.symbol);setPage('phonemePage',step)}
+function playCurrentPhoneme(){speak(currentPhoneme==='u'?'ou':'i',.72)}
+function continueFromPhoneme(){if(currentPhoneme==='u'){showSpeakingPractice(0);return}showSpeakingPractice(2)}
+function playWord(word,onend){speak(word,.82,onend)}
+function playTeachingWord(word){const map={cou:[{audio:'que',html:'c'},{audio:'ou',html:'ou'}],soufflé:[{audio:'sou',html:'s<span class="target">ou</span>'},{audio:'fflé',html:'fflé'}],vous:[{audio:'ve',html:'v'},{audio:'ou',html:'ou'},{audio:'',html:'s'}]},parts=map[word]||[{audio:word,html:word}],run=++teachingRun,wordNode=document.querySelector('.page.active .word'),original=wordNode?wordNode.innerHTML:'';if(wordNode)wordNode.innerHTML=parts.map((part,index)=>'<span class="teaching-segment" data-segment="'+index+'">'+part.html+'</span>').join('');const segments=wordNode?[...wordNode.querySelectorAll('.teaching-segment')]:[];function next(i){if(run!==teachingRun)return;segments.forEach((segment,index)=>segment.classList.toggle('active',index===i));if(i<parts.length){if(!parts[i].audio){setTimeout(()=>next(i+1),160);return}speak(parts[i].audio,.7,()=>setTimeout(()=>next(i+1),80))}else{segments.forEach(segment=>segment.classList.remove('active'));speak(word,.86,()=>{if(run===teachingRun&&wordNode)wordNode.innerHTML=original})}}stopPlayback();next(0)}
+function revealConcept(){if($('concept').classList.contains('show'))return;setTimeout(()=>{if($('concept').classList.contains('show'))return;$('learnWord').innerHTML='s<span class="target">ou</span>fflé';$('concept').classList.add('show');$('learnNext').disabled=false;speak('ou',.7)},180)}
+function startLearn(){$('learnWord').textContent='soufflé';$('concept').classList.remove('show');$('learnNext').disabled=true;setPage('learnPage',1);setTimeout(()=>playWord('soufflé',revealConcept),220);setTimeout(revealConcept,1800)}
+function showPractice(index,autoPlay=true){clearRecordedAudio();practiceIndex=index;placed=Array(practices[index].parts.length).fill(null);mappedParts=Array(practices[index].parts.length).fill(false);activeMappingSlot=0;wrongMappingSlot=null;mappingBusy=false;mappingResultReady=false;const conceptParts=practices[index].resultParts||practices[index].parts;selectedConceptPart=Math.max(0,conceptParts.findIndex(part=>part.target));selectedMappingChoice=null;selectedPart=null;draggedPart=null;slotDragFrom=null;didSlotDrag=false;checked=false;teachingRun++;stopPlayback();$('practicePage').classList.remove('speaking-mode');setPage('practicePage',practices[index].mappingStep);renderPractice();if(autoPlay)setTimeout(()=>playWord(practices[index].word),260)}
+function referenceHTML(p){return '<article class="word-card practice-reference"><div class="word-layout"><div class="audio-actions"><button class="audio-button" aria-label="听完整发音" onclick="playWord(\''+p.word+'\')"><svg viewBox="0 0 24 24"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/><path d="M17.8 6.8a7.4 7.4 0 0 1 0 10.4"/></svg></button></div><div><div class="ipa" id="practiceIpa">'+p.ipa+'</div><p class="word'+(p.phrase?' phrase-word':'')+'" id="practiceWord">'+p.word+'</p><div class="meaning">'+p.meaning+'</div></div></div></article>'+(p.hint?'<p class="word-hint">'+p.hint+'</p>':'')}
+function renderPractice(){const p=practices[practiceIndex];$('practiceTitle').textContent='拼出单词的发音：';$('practiceTitle').style.display='block';$('referenceCard').innerHTML=referenceHTML(p);$('assemblyCard').style.display='block';$('assemblyCard').classList.remove('result-mode');$('assemble').style.setProperty('--slot-count',p.parts.length);$('slots').style.setProperty('--slot-count',p.parts.length);$('assemble').style.display='block';$('assemble').classList.remove('complete','exiting');$('assemblyConcept').classList.remove('show');$('assemblyAction').style.display='block';$('checkButton').disabled=true;$('checkButton').textContent='确认';$('checkButton').onclick=checkMapping;$('speaking').classList.remove('show');$('speechFeedback').classList.remove('show');$('speechFeedback').innerHTML='';$('loader').classList.remove('show');$('mic').style.display='grid';$('retryButton').classList.remove('show');$('skipButton').classList.remove('show');$('nextButton').classList.remove('show');$('resultNote').textContent='';renderAssembly()}
+function resultParts(p){return p.resultParts||p.parts}
+function mappingPartIcon(part){return part.silent?'':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg>'}
+function isEquivalentMapping(p,answer,position){return Number.isInteger(answer)&&p.parts[answer].text===p.parts[position].text&&p.parts[answer].ipa===p.parts[position].ipa}
+function renderAssembly(){
+  const p=practices[practiceIndex],used=new Set(placed.filter(Number.isInteger)),allCorrect=checked&&placed.every((value,index)=>isEquivalentMapping(p,value,index));
+  if(mappingResultReady){
+    const summaryParts=resultParts(p);
+    $('slots').className='mapping-summary'+(summaryParts.length===3?' three-parts':'');
+    $('slots').style.setProperty('--slot-count',summaryParts.length);
+    $('slots').innerHTML=summaryParts.map((part,index)=>'<button class="mapping-summary-segment'+(part.silent?' silent':'')+(selectedConceptPart===index?' active':'')+'" onclick="selectConceptPart('+index+')" aria-pressed="'+(selectedConceptPart===index)+'" aria-label="'+(part.silent?'查看 '+part.text+' 在词尾不发音的讲解':'播放并查看 '+part.text+' '+part.ipa+' 的发音重点')+'"><span class="mapping-result">'+mappingPartIcon(part)+'<span class="mapping-grapheme">'+part.text+'</span><small>'+part.ipa+'</small></span></button>').join('');
+    $('choices').className='choices mapping-choices empty';
+    $('choices').innerHTML='';
+    $('checkButton').disabled=false;
+    return
+  }
+  $('slots').className=p.spellingGuide?'mapping-two-layer':'slots mapping-slots';
+  $('choices').className='choices mapping-choices'+(mappingBusy?' busy':'');
+  const extraParts=resultParts(p).slice(p.parts.length);
+  $('slots').style.setProperty('--slot-count',p.parts.length+extraParts.length);
+  const answerRows=p.parts.map((part,position)=>{const answer=placed[position],filled=Number.isInteger(answer),isCorrect=checked&&isEquivalentMapping(p,answer,position),state=checked?(isCorrect?' correct':' wrong'):'',content=p.spellingGuide?(filled?'<span class="filled-wave">'+waveHTML+'</span>':''):'<span class="mapping-grapheme">'+(filled?p.parts[answer].text:'')+'</span>',action=filled&&!mappingBusy?' draggable="true" ondragstart="dragPlacedMapping(event,'+position+')" onclick="removeMappingAnswer('+position+')"':'';return '<div class="mapping-row" ondragover="allowMappingRowDrop(event,this)" ondragleave="this.classList.remove(\'drop-ready\')" ondrop="dropOnMappingRow(event,'+position+',this)"><button class="mapping-answer '+(filled?'filled':'empty')+state+'"'+action+' aria-label="'+(filled?'已填入声音，点击移除':'将声音拖到这里')+'">'+content+'</button></div>'});
+  if(p.spellingGuide){$('slots').style.setProperty('--guide-count',p.spellingGuide.length);$('slots').innerHTML='<div class="mapping-units" style="--guide-count:'+p.spellingGuide.length+'">'+p.spellingGuide.map((text,index)=>'<div class="mapping-unit'+(allCorrect?' result-clickable':'')+'"'+(allCorrect?' role="button" tabindex="0" onclick="playMappedPart('+index+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();playMappedPart('+index+')}" aria-label="播放 '+text+' 的发音"':'')+'><span class="mapping-unit-label">'+text+'</span>'+answerRows[index]+'</div>').join('')+'</div>'}else{$('slots').innerHTML=answerRows.join('');if(extraParts.length)$('slots').insertAdjacentHTML('beforeend',extraParts.map(part=>'<div class="mapping-row silent-preview-row"><div class="mapping-answer silent-preview" aria-label="'+part.text+' '+part.ipa+' 在这里不发音"><span class="silent-preview-copy"><span class="mapping-grapheme">'+part.text+'</span><small>'+part.ipa+'</small></span></div></div>').join(''))}
+  $('choices').innerHTML=p.order.map(i=>'<button class="sound-choice'+(used.has(i)?' used':'')+(selectedMappingChoice===i?' playing':'')+'" data-choice="'+i+'" draggable="true" ondragstart="dragMappingChoice(event,'+i+')" onclick="chooseMappingPart('+i+')" aria-label="试听并拖拽声音组块">'+waveHTML+'</button>').join('');
+  $('checkButton').disabled=!placed.every(Number.isInteger)
+}
+function selectConceptPart(index,play=true){const p=practices[practiceIndex],part=resultParts(p)[index],descriptions={c:'/k/：舌根抬起贴近软腭，短促放开，听起来接近中文中的“科”。',v:'/v/：上牙轻触下唇，让气流从中间通过。',ou:'/u/：双唇收圆，舌头向后，听起来接近中文中的“乌”。',s:'辅音词尾通常不发音。vous 末尾的 s 不读，读到 ou 就结束。',mi:'mi 读 /mi/：双唇闭合后轻轻打开，再接 /i/；嘴角向两侧展开，听起来接近中文中的“衣”。',di:'di 读 /di/：舌尖抵住上齿龈后放开，再接 /i/；嘴角向两侧展开，听起来接近中文中的“衣”。'};selectedConceptPart=index;if(mappingResultReady)renderAssembly();$('conceptDescription').textContent=descriptions[part.text]||'';$('mouthMedia').style.display=part.text==='ou'?'block':'none';if(play&&part.audio)speak(part.audio,.72)}
+function chooseMappingPart(index){if(mappingBusy||placed.includes(index))return;selectedMappingChoice=index;renderAssembly();speak(practices[practiceIndex].parts[index].audio,.72,()=>{if(selectedMappingChoice===index){selectedMappingChoice=null;renderAssembly()}})}
+function playMappedPart(position){if(!checked)return;const answer=placed[position],part=practices[practiceIndex].parts[answer];if(part?.audio)speak(part.audio,.72)}
+function removeMappingAnswer(position){if(mappingBusy)return;checked=false;placed[position]=null;$('resultNote').textContent='';renderAssembly()}
+function dragMappingChoice(event,index){if(mappingBusy||placed.includes(index)){event.preventDefault();return}event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain','choice:'+index)}
+function dragPlacedMapping(event,position){if(mappingBusy)return;event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain','slot:'+position)}
+function allowMappingRowDrop(event,row){if(mappingBusy)return;event.preventDefault();row.classList.add('drop-ready');event.dataTransfer.dropEffect='move'}
+function dropOnMappingRow(event,target,row){event.preventDefault();row.classList.remove('drop-ready');if(mappingBusy)return;const [kind,value]=event.dataTransfer.getData('text/plain').split(':'),source=Number(value);if(!Number.isInteger(source))return;if(kind==='choice'){if(placed.includes(source))return;placed[target]=source;selectedMappingChoice=null;checked=false;$('resultNote').textContent='';renderAssembly();return}if(kind!=='slot'||source===target||!Number.isInteger(placed[source]))return;const moving=placed[source];placed[source]=placed[target];placed[target]=moving;checked=false;$('resultNote').textContent='';renderAssembly()}
+function checkMapping(){if(mappingBusy||!placed.every(Number.isInteger))return;const p=practices[practiceIndex];checked=true;mappingBusy=true;renderAssembly();const correct=placed.every((value,index)=>isEquivalentMapping(p,value,index));$('checkButton').disabled=true;if(!correct){setTimeout(()=>{checked=false;mappingBusy=false;placed=Array(p.parts.length).fill(null);$('resultNote').textContent='';renderAssembly()},600);return}playWord(p.word);setTimeout(()=>{mappingBusy=false;$('checkButton').disabled=false;$('checkButton').textContent='继续';$('checkButton').onclick=()=>{if(p.word==='cou'){showPractice(1);return}if(p.word==='mou'){showPhonemeCard('u',5);return}showPhonemeCard('i',10)}},620)}
+function resolveMappingChoice(index){const p=practices[practiceIndex];if(index===activeMappingSlot){mappedParts[index]=true;selectedMappingChoice=null;wrongMappingSlot=null;activeMappingSlot=mappedParts.findIndex(value=>!value);mappingBusy=false;renderAssembly();if(activeMappingSlot<0)setTimeout(completeSoundMapping,320);return}selectedMappingChoice=null;wrongMappingSlot=activeMappingSlot;mappingBusy=true;renderAssembly();setTimeout(()=>{wrongMappingSlot=null;mappingBusy=false;renderAssembly()},720)}
+function completeSoundMapping(){const p=practices[practiceIndex];mappingBusy=true;let i=0;function playNext(){if(i<p.parts.length){speak(p.parts[i++].audio,.72,()=>setTimeout(playNext,80));return}playWord(p.word,showMappingResult)}playNext()}
+function showMappingResult(){const p=practices[practiceIndex];mappingResultReady=true;$('assemble').classList.add('complete');$('assemblyCard').classList.add('result-mode');renderAssembly();if(p.showConcept){$('practiceWord').textContent=p.word;$('assemblyConcept').classList.add('show');selectConceptPart(selectedConceptPart,false)}$('assemblyAction').style.display='block';$('checkButton').disabled=false;$('checkButton').textContent='继续';$('checkButton').onclick=p.mappingOnly?finishLesson:showSpeaking}
+function placeSelected(position){return}
+function startDrag(event,index){draggedPart=index;selectedPart=index;event.currentTarget.classList.add('dragging');document.querySelectorAll('#slots .slot:not(.filled)').forEach(slot=>slot.classList.add('drag-target'));event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(index));speak(practices[practiceIndex].parts[index].audio,.72)}
+function endDrag(event){event.currentTarget.classList.remove('dragging');document.querySelectorAll('#slots .slot').forEach(slot=>slot.classList.remove('drag-target','drop-ready'));draggedPart=null}
+function startSlotDrag(event,position){if(checked)return;slotDragFrom=position;didSlotDrag=false;event.currentTarget.classList.add('dragging');document.querySelectorAll('#slots .slot').forEach(slot=>slot.classList.add('drag-target'));event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(position))}
+function endSlotDrag(event){event.currentTarget.classList.remove('dragging');document.querySelectorAll('#slots .slot').forEach(slot=>slot.classList.remove('drag-target','drop-ready'));slotDragFrom=null;setTimeout(()=>didSlotDrag=false,0)}
+function dropSlot(event,position,slot){event.preventDefault();slot.classList.remove('drop-ready');if(slotDragFrom===null||slotDragFrom===position||checked)return;const moving=placed[slotDragFrom];placed[slotDragFrom]=placed[position];placed[position]=moving;didSlotDrag=true;checked=false;renderAssembly()}
+function allowDrop(event,slot){event.preventDefault();slot.classList.add('drop-ready');event.dataTransfer.dropEffect='move'}
+function dropPart(event,position,slot){event.preventDefault();slot.classList.remove('drop-ready');const index=draggedPart===null?Number(event.dataTransfer.getData('text/plain')):draggedPart;if(!Number.isInteger(index)||placed[position]!==null)return;placed[position]=index;selectedPart=null;draggedPart=null;checked=false;renderAssembly()}
+function removePlaced(position){if(didSlotDrag)return;if(checked&&placed[position]===position)return;placed[position]=null;checked=false;$('resultNote').textContent='';renderAssembly()}
+function checkAssembly(){
+  const p=practices[practiceIndex];
+  checked=true;
+  const correct=placed.every((value,index)=>value===index);
+  renderAssembly();
+  if(!correct){$('resultNote').textContent='有些声音的位置不对，点击红色组块重新选择。';return}
+  $('resultNote').textContent='';
+  $('checkButton').disabled=true;
+  setTimeout(()=>{
+    const slots=[...$('slots').children];
+    slots.forEach((slot,index)=>{slot.className='slot mapped correct';slot.textContent=p.parts[index].text});
+    $('choices').innerHTML='';
+    $('assemble').classList.add('complete');
+    playWord(p.word,()=>{
+      if(p.showConcept){
+        setTimeout(()=>{
+          $('assemble').classList.add('exiting');
+          setTimeout(()=>{
+            $('assemble').style.display='none';
+            $('practiceWord').textContent=p.word;
+            $('assemblyConcept').classList.add('show');
+            $('checkButton').disabled=false;
+            $('checkButton').textContent='继续';
+            $('checkButton').onclick=showSpeaking;
+          },210)
+        },320)
+      }else{
+        $('checkButton').disabled=false;
+        $('checkButton').textContent='继续';
+        $('checkButton').onclick=showSpeaking
+      }
+    })
+  },300)
+}
+function showSpeakingPractice(index){clearRecordedAudio();practiceIndex=index;stopPlayback();$('practicePage').classList.add('speaking-mode');$('referenceCard').innerHTML=referenceHTML(practices[index]);$('speaking').classList.remove('show');$('speechFeedback').classList.remove('show');$('speechFeedback').innerHTML='';$('loader').classList.remove('show');$('wave').classList.remove('show');$('mic').classList.remove('recording');$('mic').style.display='grid';$('retryButton').classList.remove('show');$('skipButton').classList.remove('show');$('nextButton').classList.remove('show');showSpeaking()}
+function speakingWordHTML(p){if(p.word==='cou')return 'c<span class="target">ou</span>';if(p.word==='goût')return 'g<span class="target challenge-target">oû</span>t';if(p.phrase)return 's’<span class="target">i</span>l v<span class="target">ou</span>s plaît';return p.word}
+function showSpeaking(){const p=practices[practiceIndex];if(!p.speakingStep){finishLesson();return}setPage('practicePage',p.speakingStep);$('assemblyCard').style.display='none';$('assemblyAction').style.display='none';$('practiceTitle').innerHTML=p.phrase?'挑战读词组：':p.challenge?'读单词：<span class="challenge-badge">挑战</span>':'读单词：';$('practiceTitle').style.display='block';$('practiceWord').innerHTML=speakingWordHTML(p);$('speaking').classList.add('show');$('skipButton').classList.add('show');$('mic').style.display='grid';setTimeout(()=>playWord(p.word),220)}
+function preferredRecordingType(){return['audio/webm;codecs=opus','audio/mp4','audio/webm'].find(type=>MediaRecorder.isTypeSupported(type))||''}
+function stopMediaStream(){if(mediaStream){mediaStream.getTracks().forEach(track=>track.stop());mediaStream=null}}
+function setRecordedAudio(blob){if(recordedAudioUrl)URL.revokeObjectURL(recordedAudioUrl);recordedAudioUrl=URL.createObjectURL(blob)}
+function clearRecordedAudio(){if(recordedAudioUrl){URL.revokeObjectURL(recordedAudioUrl);recordedAudioUrl=''}}
+function playMyRecording(){if(!recordedAudioUrl)return;stopPlayback();const audio=new Audio(recordedAudioUrl);activeAudio=audio;audio.onended=()=>{if(activeAudio===audio)activeAudio=null};audio.onerror=()=>{if(activeAudio===audio)activeAudio=null};audio.play()}
+async function record(){const mic=$('mic');if(mic.classList.contains('recording'))return;teachingRun++;stopPlayback();$('speechFeedback').classList.remove('show');document.querySelector('.speech-actions').classList.remove('paired');$('retryButton').classList.remove('show');$('skipButton').classList.remove('show');$('nextButton').classList.remove('show');try{mediaStream=await navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:true,noiseSuppression:true,autoGainControl:true}});recordingChunks=[];const mimeType=preferredRecordingType();mediaRecorder=new MediaRecorder(mediaStream,mimeType?{mimeType}:undefined);mediaRecorder.ondataavailable=event=>{if(event.data.size)recordingChunks.push(event.data)};mediaRecorder.onstop=async()=>{clearTimeout(recordingTimer);mic.classList.remove('recording');mic.style.display='none';$('wave').classList.remove('show');$('loader').classList.add('show');const type=mediaRecorder.mimeType||mimeType||'audio/webm',blob=new Blob(recordingChunks,{type});stopMediaStream();await submitRecording(blob,type)};mediaRecorder.start();mic.classList.add('recording');$('wave').classList.add('show');recordingTimer=setTimeout(()=>{if(mediaRecorder?.state==='recording')mediaRecorder.stop()},1700)}catch(error){stopMediaStream();handleRecordingFailure()}}
+async function submitRecording(blob,mimeType){setRecordedAudio(blob);const extension=mimeType.includes('mp4')?'m4a':mimeType.includes('wav')?'wav':'webm',form=new FormData();form.append('audio',blob,'recording.'+extension);form.append('platform','azure');form.append('locale','fr-FR');form.append('userName','french_pronunciation_demo');const endpoint=location.protocol==='file:'?'http://127.0.0.1:4173/api/asr':'/api/asr';try{const response=await fetch(endpoint,{method:'POST',body:form}),payload=await response.json();if(!response.ok||payload?.code===300)throw new Error(payload?.msg||'ASR '+response.status);const text=payload?.data?.text||payload?.text||'';showSpeechFeedback(isAcceptedRecognition(text))}catch(error){handleRecordingFailure()}}
+function handleRecordingFailure(){$('loader').classList.remove('show');$('wave').classList.remove('show');$('mic').classList.remove('recording');$('mic').style.display='none';const playback=recordedAudioUrl?recordingPlayButton():'';$('speechFeedback').innerHTML='<div class="recording-compact"><strong>我的录音</strong>'+playback+'</div>';$('speechFeedback').classList.add('show');document.querySelector('.speech-actions').classList.add('paired');$('retryButton').classList.add('show');$('skipButton').classList.remove('show');$('nextButton').classList.add('show')}
+function normalizeRecognition(text){return text.toLocaleLowerCase('fr-FR').normalize('NFC').replace(/[.,!?;:«»“”"']/g,' ').replace(/\s+/g,' ').trim()}
+function isAcceptedRecognition(text){const recognized=normalizeRecognition(text),accepted=practices[practiceIndex].accepted||[practices[practiceIndex].word];return accepted.some(item=>{const expected=normalizeRecognition(item);return expected.includes(' ')?recognized===expected||recognized.includes(expected):recognized.split(' ').includes(expected)})}
+function recordingPlayButton(){return '<button class="recording-play" aria-label="播放我的录音" onclick="playMyRecording()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><span>播放</span></button>'}
+function showSpeechFeedback(correct){$('loader').classList.remove('show');const p=practices[practiceIndex],word=$('practiceWord'),recordingButton=recordingPlayButton();if(correct){word.innerHTML='<span class="word-result correct">'+p.word+'</span>';$('speechFeedback').innerHTML='<div class="recording-compact"><strong>我的录音</strong>'+recordingButton+'</div>';$('speechFeedback').classList.add('show');$('nextButton').classList.add('show');return}word.innerHTML='<span class="word-result wrong">'+p.word+'</span>';$('speechFeedback').innerHTML='<article class="knowledge recording-feedback"><div class="recording-review"><h3>我的录音</h3>'+recordingButton+'</div><h4 class="advice-heading">发音建议</h4><div class="feedback-points">'+p.tips.map(tip=>'<div class="knowledge-point"><div class="knowledge-copy"><b><span class="grapheme">'+tip.g+'</span><span>'+tip.title+'</span></b><p>'+tip.body+'</p></div><button class="tip-audio" aria-label="播放 '+tip.g+'" onclick="speak(\''+tip.audio+'\',.76)"><svg viewBox="0 0 24 24"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg></button></div>').join('')+'</div></article>';$('speechFeedback').classList.add('show');$('retryButton').classList.add('show');$('skipButton').classList.add('show')}
+function retryRecording(){$('practiceWord').innerHTML=speakingWordHTML(practices[practiceIndex]);$('speechFeedback').classList.remove('show');document.querySelector('.speech-actions').classList.remove('paired');$('retryButton').classList.remove('show');$('skipButton').classList.remove('show');$('mic').style.display='grid';record()}
+function showListeningQuestion(target='sous',step=1){clearRecordedAudio();stopPlayback();listeningTarget=target;listeningStep=step;listeningChoice='';listeningChecked=false;$('listeningReveal').classList.remove('show');$('listeningPrompt').setAttribute('aria-label','再听一遍 '+target);setPage('listeningPage',step);renderListeningQuestion();setTimeout(()=>playWord(target),260)}
+function renderListeningQuestion(){const correct=listeningChecked&&listeningChoice===listeningTarget;document.querySelectorAll('.listening-option').forEach(option=>{const word=option.dataset.word;option.classList.toggle('selected',!listeningChecked&&word===listeningChoice);option.classList.toggle('correct',listeningChecked&&word===listeningTarget);option.classList.toggle('wrong',listeningChecked&&word===listeningChoice&&word!==listeningTarget);option.setAttribute('aria-pressed',String(word===listeningChoice));option.setAttribute('aria-disabled',String(listeningChecked))});$('listeningCheck').disabled=!listeningChoice||(listeningChecked&&!correct);$('listeningCheck').textContent=correct?'继续':'确认';$('listeningCheck').onclick=correct?finishListening:checkListeningAnswer}
+function selectListeningAnswer(word){if(listeningChecked){playWord(word);return}listeningChoice=word;renderListeningQuestion();playWord(word)}
+function showListeningReveal(){const isU=listeningTarget==='sous';currentPhoneme=isU?'u':'i';$('listeningPhoneme').textContent=isU?'/u/':'/i/';$('listeningPosition').textContent=isU?'双唇收圆，舌头向后，听起来接近中文中的“乌”。':'嘴角向两侧展开，舌位靠前，听起来接近中文中的“衣”。';$('listeningSpelling').textContent=isU?'ou':'i';$('listeningExamples').textContent=isU?'sous · cou':'si · midi';$('listeningPhonemePlay').setAttribute('aria-label','播放 '+(isU?'/u/':'/i/'));$('listeningReveal').classList.add('show');setTimeout(()=>playListeningPhoneme(),180)}
+function playListeningPhoneme(){speak(currentPhoneme==='u'?'ou':'i',.72)}
+function checkListeningAnswer(){if(!listeningChoice||listeningChecked)return;listeningChecked=true;renderListeningQuestion();if(listeningChoice===listeningTarget)return;setTimeout(()=>{listeningChecked=false;listeningChoice='';renderListeningQuestion()},720)}
+function finishListening(){stopPlayback();showPhonemeCard('i',7)}
+function showComparisonQuestion(){stopPlayback();comparisonChoice='';comparisonChecked=false;document.querySelectorAll('.comparison-word').forEach(card=>card.classList.remove('playing'));document.querySelectorAll('.comparison-option').forEach(option=>option.className='comparison-option');$('comparisonResult').classList.remove('show');$('comparisonCheck').disabled=true;$('comparisonCheck').textContent='确认';$('comparisonCheck').onclick=checkComparisonAnswer;setPage('comparisonPage',10)}
+function playComparisonWord(word,card){document.querySelectorAll('.comparison-word').forEach(item=>item.classList.toggle('playing',item===card));playWord(word,()=>card.classList.remove('playing'))}
+function selectComparisonAnswer(answer){if(comparisonChecked)return;comparisonChoice=answer;document.querySelectorAll('.comparison-option').forEach(option=>option.classList.toggle('selected',option.dataset.comparisonAnswer===answer));$('comparisonCheck').disabled=false}
+function checkComparisonAnswer(){if(!comparisonChoice||comparisonChecked)return;comparisonChecked=true;const correct=comparisonChoice==='same';document.querySelectorAll('.comparison-option').forEach(option=>{option.classList.remove('selected');if(option.dataset.comparisonAnswer===comparisonChoice)option.classList.add(correct?'correct':'wrong')});if(!correct){$('comparisonCheck').disabled=true;setTimeout(()=>{comparisonChoice='';comparisonChecked=false;document.querySelectorAll('.comparison-option').forEach(option=>option.className='comparison-option');$('comparisonCheck').disabled=true},720);return}$('comparisonResult').classList.add('show');$('comparisonCheck').textContent='继续';$('comparisonCheck').onclick=()=>showSpellingPage('i')}
+function showSpellingPage(phoneme){stopPlayback();currentPhoneme=phoneme;const data=phoneme==='u'?{step:6,title:'读音为 /u/ 的字母组合',summary:'通过刚才的题目你会发现，ou、oû 的发音都是 /u/。',rows:[{key:'ou',word:'cou',display:'c<mark>ou</mark>',ipa:'/ku/',meaning:'脖子'},{key:'oû',word:'goût',display:'g<mark>oû</mark>t',ipa:'/gu/',meaning:'味道'},{key:'où',word:'où',display:'<mark>où</mark>',ipa:'/u/',meaning:'哪里',divider:'除此之外，où 也发相同的音。'}],next:showIRulePage}:{step:11,title:'读音为 /i/ 的字母',summary:'通过刚才的题目你会发现，i、y 的发音都是 /i/。',rows:[{key:'i',word:'sandwich',display:'sandw<mark>i</mark>ch',ipa:'/sɑ̃.dwitʃ/',meaning:'三明治'},{key:'y',word:'stylo',display:'st<mark>y</mark>lo',ipa:'/sti.lo/',meaning:'圆珠笔'},{key:'î',word:'dîner',display:'d<mark>î</mark>ner',ipa:'/di.ne/',meaning:'吃晚饭',divider:'除此之外，î、ï 也发相同的音。'},{key:'ï',word:'maïs',display:'ma<mark>ï</mark>s',ipa:'/ma.is/',meaning:'玉米'}],next:()=>showSpeakingPractice(4)};$('spellingTitle').textContent=data.title;$('spellingSummary').textContent=data.summary;$('spellingRows').innerHTML=data.rows.map(item=>(item.divider?'<p class="spelling-divider">'+item.divider+'</p>':'')+'<section class="spelling-group"><div class="spelling-group-head"><h2>'+item.key+'</h2></div><article class="spelling-example"><div class="spelling-example-copy"><div class="spelling-example-word">'+item.display+'</div><div class="spelling-example-meta">'+item.ipa+'　'+item.meaning+'</div></div><button class="spelling-example-play" aria-label="播放 '+item.word+'" onclick="playWord(\''+item.word+'\')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/></svg></button></article></section>').join('');$('spellingNext').onclick=data.next;setPage('spellingPage',data.step)}
+function skipSpeaking(){nextPractice()}
+function nextPractice(){const word=practices[practiceIndex].word;if(word==='cou'){showSpeakingPractice(3);return}if(word==='goût'){showSpellingPage('u');return}if(word==='midi'){showComparisonQuestion();return}finishLesson()}
+function finishLesson(){stopPlayback();setPage('completePage',totalSteps)}
+function restart(){stopPlayback();clearRecordedAudio();showTargetPage()}
+showTargetPage();
+document.addEventListener('click',event=>{if(!$('stepMenu').contains(event.target)&&!$('counter').contains(event.target))closeStepMenu()});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeStepMenu()});
+</script>
+</body></html>
